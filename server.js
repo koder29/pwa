@@ -9,9 +9,19 @@ const app = express();
 app.disable('ETag')
 const served = new Map();
 app.use(morgan('short'));
+
+
+app.get('/ngsw.json', (req, res)=>{
+    console.log("Reqquest for SW");
+    const sw = readFileSync('/home/mathstracted/projects/fe/ng/pwa-test/pwa/dist/pwa/ngsw.json');
+    res.end(sw.toString(), ()=>res.end());
+})
+
+
 app.use(express.static(path.join(__dirname, '/dist/pwa'), {
-    maxAge: 24 * 60 * 60 * 1000,
 }));
+
+
 
 app.get('*', (req, res) => {
     let buffer = readFileSync(path.join(__dirname, '/dist/pwa/index.html'));
